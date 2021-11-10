@@ -2,6 +2,7 @@ import torch
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+
 class LMDataset(torch.utils.data.Dataset):
     def __init__(self, x, y):
         self.x = torch.tensor(x).to(device)
