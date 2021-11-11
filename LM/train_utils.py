@@ -1,7 +1,10 @@
 import torch
 from config import Config
 from tqdm import tqdm
+from processing_utils import load_artifact
 
+token_id = load_artifact(Config.SAVE_TOKEN_ID)
+id_token = load_artifact(Config.SAVE_ID_TOKEN)
 
 def train_model(
     model,
