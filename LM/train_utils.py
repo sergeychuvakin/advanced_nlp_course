@@ -31,7 +31,7 @@ def train_model(
                     (
                         x,
                         torch.full(
-                            (config.BATCH_SIZE - x.shape[0], x.shape[1]),
+                            (Config.BATCH_SIZE - x.shape[0], x.shape[1]),
                             token_id[Config.TOKEN_PADDING],
                             device=model.device,
                         ),
