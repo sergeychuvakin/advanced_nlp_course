@@ -15,6 +15,9 @@ class Config:
     TOKEN_PADDING: str = "[PAD]"
     TRAIN_PROPORTION = 0.86
     SAVE_MODEL_FNAME = "myLM.pt"
+    SAVE_MODEL_CONFIG: str = "model_config.json"
+    SAVE_TOKEN_ID: str = "token_id.json"
+    SAVE_ID_TOKEN: str = "id_token.json"
 
 
 class LanguageModelConfig(BaseModel):
