@@ -31,16 +31,27 @@ def _transform_model_output(out, random, id_token, top=3):
     return id_token[str(idx)]
 
 
-def predict_one_word(word, model, token_id, id_token, random=True):
+def predict_one_word(sentence, model, token_id, id_token, random=True):
+    
+    h = None
+    for word in sentence.split():
+    
+        input_tensor = _transform_raw_word(word, token_id)
+        out, h = _get_model_output(model, input_tensor, h)
+        word = _transform_model_output(out, random, id_token)
+        
+    return word
 
-    input_tensor = _transform_raw_word(word, token_id)
-    out, h = _get_model_output(model, input_tensor)
-    return _transform_model_output(out, random, id_token)
 
-
-def predict_sample(word, model, token_id, id_token, length_of_sample, random=True):
+def predict_sample(sentence, model, token_id, id_token, length_of_sample, random=True):
     result = []
     h = None
+    for word in sentence.split():
+    
+        input_tensor = _transform_raw_word(word, token_id)
+        out, h = _get_model_output(model, input_tensor, h)
+        word = _transform_model_output(out, random, id_token)
+        result.append(word)
     while len(result) < length_of_sample:
 
         input_tensor = _transform_raw_word(word, token_id)

@@ -81,6 +81,6 @@ def train_model(
 
             if n % print_every:
 
-                print(f"Cross-entropy loss: {loss}")
+                print(f"Perplexity loss: {loss}")
 
     return model
