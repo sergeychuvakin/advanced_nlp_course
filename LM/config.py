@@ -9,15 +9,17 @@ class Config:
         "https://cs.stanford.edu/people/karpathy/char-rnn/shakespeare_input.txt"
     )
     TOKENIZER: str = "bert-base-uncased-vocab.txt"
-    N_GRAM: int = 2
+    N_GRAM: int = 10
     BATCH_SIZE: int = 1000
     TOKEN_END_OF_SENTENCE: str = "<eos>"
     TOKEN_PADDING: str = "[PAD]"
+    TOKEN_UNKNOWN: str = "[UNK]"
     TRAIN_PROPORTION = 0.86
-    SAVE_MODEL_FNAME = "myLM.pt"
+    SAVE_MODEL_FNAME = "myLM(1).pt"
     SAVE_MODEL_CONFIG: str = "model_config.json"
     SAVE_TOKEN_ID: str = "token_id.json"
     SAVE_ID_TOKEN: str = "id_token.json"
+        
 
 
 class LanguageModelConfig(BaseModel):
