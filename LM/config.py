@@ -9,7 +9,7 @@ class Config:
         "https://cs.stanford.edu/people/karpathy/char-rnn/shakespeare_input.txt"
     )
     TOKENIZER: str = "bert-base-uncased-vocab.txt"
-    N_GRAM: int = 10
+    N_GRAM: int = 3
     BATCH_SIZE: int = 1000
     TOKEN_END_OF_SENTENCE: str = "<eos>"
     TOKEN_PADDING: str = "[PAD]"

@@ -6,10 +6,35 @@ from processing_utils import load_artifact
 token_id = load_artifact(Config.SAVE_TOKEN_ID)
 id_token = load_artifact(Config.SAVE_ID_TOKEN)
 
+
+def add_paddings(x, y, token_id, model):
+    
+    x = torch.cat(
+                    (
+                        x,
+                        torch.full(
+                            (Config.BATCH_SIZE - x.shape[0], x.shape[1]),
+                            token_id[Config.TOKEN_PADDING],
+                            device=model.device,
+                        ),
+                    )
+                )
+    
+    y = torch.cat(
+                    (
+                        y,
+                        torch.full(
+                            (Config.BATCH_SIZE - y.shape[0], y.shape[1]),
+                            token_id[Config.TOKEN_PADDING],
+                            device=model.device,
+                        ),
+                    )
+                )
+    return x, y
+
 def train_model(
     model,
     train_dl,
-    batch_size,
     optimizer,
     loss_func,
     epochs=2,
@@ -24,32 +49,13 @@ def train_model(
     for e in tqdm(range(epochs)):
 
         # initialize hidden state
-        h = model.init_state(batch_size)
+        h = model.init_state(Config.BATCH_SIZE)
 
         for n, (x, y) in enumerate(tqdm(train_dl)):
 
             if x.shape[0] < Config.BATCH_SIZE:  ## add paddings
 
-                x = torch.cat(
-                    (
-                        x,
-                        torch.full(
-                            (Config.BATCH_SIZE - x.shape[0], x.shape[1]),
-                            token_id[Config.TOKEN_PADDING],
-                            device=model.device,
-                        ),
-                    )
-                )
-                y = torch.cat(
-                    (
-                        y,
-                        torch.full(
-                            (Config.BATCH_SIZE - y.shape[0], y.shape[1]),
-                            token_id[Config.TOKEN_PADDING],
-                            device=model.device,
-                        ),
-                    )
-                )
+                x, y, = add_paddings(x, y, token_id, model)
 
             # detach hidden states
             h = tuple([each.data for each in h])
@@ -61,8 +67,8 @@ def train_model(
             output, h = model(x, h)
 
             # calculate the loss and perform backprop
-            loss = loss_func(output, y.view(-1))
-
+            loss = torch.exp(loss_func(output, y.view(-1))) 
+            loss = torch.exp(loss) # perplexity
             # back-propagate error
             loss.backward(retain_graph=True)
 
