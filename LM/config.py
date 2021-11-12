@@ -19,7 +19,6 @@ class Config:
     SAVE_MODEL_CONFIG: str = "model_config.json"
     SAVE_TOKEN_ID: str = "token_id.json"
     SAVE_ID_TOKEN: str = "id_token.json"
-        
 
 
 class LanguageModelConfig(BaseModel):

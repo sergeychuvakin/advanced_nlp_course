@@ -1,36 +1,37 @@
 import torch
 from config import Config
-from tqdm import tqdm
 from processing_utils import load_artifact
+from tqdm import tqdm
 
 token_id = load_artifact(Config.SAVE_TOKEN_ID)
 id_token = load_artifact(Config.SAVE_ID_TOKEN)
 
 
 def add_paddings(x, y, token_id, model):
-    
+
     x = torch.cat(
-                    (
-                        x,
-                        torch.full(
-                            (Config.BATCH_SIZE - x.shape[0], x.shape[1]),
-                            token_id[Config.TOKEN_PADDING],
-                            device=model.device,
-                        ),
-                    )
-                )
-    
+        (
+            x,
+            torch.full(
+                (Config.BATCH_SIZE - x.shape[0], x.shape[1]),
+                token_id[Config.TOKEN_PADDING],
+                device=model.device,
+            ),
+        )
+    )
+
     y = torch.cat(
-                    (
-                        y,
-                        torch.full(
-                            (Config.BATCH_SIZE - y.shape[0], y.shape[1]),
-                            token_id[Config.TOKEN_PADDING],
-                            device=model.device,
-                        ),
-                    )
-                )
+        (
+            y,
+            torch.full(
+                (Config.BATCH_SIZE - y.shape[0], y.shape[1]),
+                token_id[Config.TOKEN_PADDING],
+                device=model.device,
+            ),
+        )
+    )
     return x, y
+
 
 def train_model(
     model,
@@ -55,7 +56,7 @@ def train_model(
 
             if x.shape[0] < Config.BATCH_SIZE:  ## add paddings
 
-                x, y, = add_paddings(x, y, token_id, model)
+                x, y = add_paddings(x, y, token_id, model)
 
             # detach hidden states
             h = tuple([each.data for each in h])
@@ -67,8 +68,8 @@ def train_model(
             output, h = model(x, h)
 
             # calculate the loss and perform backprop
-            loss = torch.exp(loss_func(output, y.view(-1))) 
-            #loss = torch.exp(loss) # perplexity
+            loss = torch.exp(loss_func(output, y.view(-1)))
+            # loss = torch.exp(loss) # perplexity
             # back-propagate error
             loss.backward(retain_graph=True)
 

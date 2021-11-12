@@ -1,9 +1,8 @@
 import json
 import re
 from itertools import chain
-from typing import Dict, Tuple, Union, Any, List
+from typing import Any, Dict, Tuple, Union
 
-import torch
 from config import Config
 from nltk import ngrams
 from tokenizers import BertWordPieceTokenizer
@@ -25,9 +24,7 @@ def split_on_sequences(corpus):
 
 
 def create_ngrams(tokens_lists, N):
-    return [
-        tuple(ngrams(sent.ids, N)) for sent in tqdm(tokens_lists)
-    ]
+    return [tuple(ngrams(sent.ids, N)) for sent in tqdm(tokens_lists)]
 
 
 def create_to_x_and_y(tokens_grams: tuple):
@@ -38,7 +35,7 @@ def create_to_x_and_y(tokens_grams: tuple):
 
 
 def create_vocab(
-    tokenizer: BertWordPieceTokenizer
+    tokenizer: BertWordPieceTokenizer,
 ) -> Tuple[Union[Dict[str, int], Dict[int, str]]]:
 
     decoder = tokenizer.get_vocab()
@@ -51,12 +48,14 @@ def create_vocab(
 def word2int(seq, token_id):
     return [token_id[i] for i in seq.split()]
 
-def save_artifacts(*artifacts:Tuple[Tuple[Union[Any, str]]]) -> None:
+
+def save_artifacts(*artifacts: Tuple[Tuple[Union[Any, str]]]) -> None:
     for arti in artifacts:
         with open(arti[1], "w") as f:
             json.dump(arti[0], f)
-            
-def load_artifact(fname:str):
+
+
+def load_artifact(fname: str):
     with open(fname, "r") as f:
         arti = json.load(f)
     return arti
