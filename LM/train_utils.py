@@ -68,7 +68,7 @@ def train_model(
 
             # calculate the loss and perform backprop
             loss = torch.exp(loss_func(output, y.view(-1))) 
-            loss = torch.exp(loss) # perplexity
+            #loss = torch.exp(loss) # perplexity
             # back-propagate error
             loss.backward(retain_graph=True)
 
