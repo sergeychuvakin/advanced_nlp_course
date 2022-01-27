@@ -5,26 +5,43 @@ from typing import Any, Dict, Tuple, Union
 
 from config import Config
 from nltk import ngrams
+from nltk.corpus import stopwords
 from tokenizers import BertWordPieceTokenizer
 from tqdm import tqdm
 
 
+
 def clean_text(text):
     text = re.sub(r"\n", " ", text)
-    text = re.sub(r"[\:\;\&\%\$\@\^\(\)\[\]]", " ", text)
+    text = re.sub(r"[\:\;\&\%\$\@\^\(\)\[\]\,\-\']", " ", text)
     text = re.sub(r"\s+", " ", text)
-    text = re.sub(r"[\.\?\!\.{3}]", f".{Config.TOKEN_END_OF_SENTENCE}", text)
+    text = re.sub(r"\.{3}", ".", text)
+    text = re.sub(r"[\.\?\!]", f"{Config.TOKEN_END_OF_SENTENCE}", text)
     text = text.strip()
     text = text.lower()
+    text = re.sub(r"(?:^| )\w(?:$| |<eos>)", "", text)
     return text
+
+def remove_stopwords(text):
+    stop = set(stopwords.words('english'))
+    return " ".join([word for word in tqdm(text.split()) if word not in stop])
+
+def remove_speakers(text):
+    return re.sub(r".+:\n", " ", text)
 
 
 def split_on_sequences(corpus):
-    return corpus.split(Config.TOKEN_END_OF_SENTENCE)
+    return [seq.strip() for seq in corpus.split(Config.TOKEN_END_OF_SENTENCE)]
 
 
 def create_ngrams(tokens_lists, N):
     return [tuple(ngrams(sent.ids, N)) for sent in tqdm(tokens_lists)]
+
+def create_ngrams1(tokens_lists, N, vocab):
+    
+    tokens_lists = [[vocab[word] for word in sent] for sent in tqdm(tokens_lists)]
+    
+    return [tuple(ngrams(sent, N)) for sent in tqdm(tokens_lists)]
 
 
 def create_to_x_and_y(tokens_grams: tuple):

@@ -1,10 +1,7 @@
 import torch
 from config import Config
-from processing_utils import load_artifact
 from tqdm import tqdm
 
-token_id = load_artifact(Config.SAVE_TOKEN_ID)
-id_token = load_artifact(Config.SAVE_ID_TOKEN)
 
 
 def add_paddings(x, y, token_id, model):
@@ -38,6 +35,7 @@ def train_model(
     train_dl,
     optimizer,
     loss_func,
+    token_id,
     epochs=2,
     print_every=1000,
     clip=1,

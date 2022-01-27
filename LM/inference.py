@@ -3,7 +3,6 @@ from typing import Dict
 
 import torch
 from config import Config, LanguageModelConfig
-from dependencies import tokenizer
 from loguru import logger
 from model import LM_LSTM
 from processing_utils import load_artifact

@@ -10,9 +10,13 @@ os.system(
 
 corpus = requests.get(Config.CORPUS_URL).text
 
-tokenizer = BertWordPieceTokenizer(
+tokenizer1 = BertWordPieceTokenizer(
     Config.TOKENIZER,
     lowercase=True,
     strip_accents=False,  ## акцанты над буквами
     wordpieces_prefix="##",
 )
+
+from nltk.tokenize import word_tokenize
+
+tokenizer = word_tokenize

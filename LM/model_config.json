@@ -1,1 +1,1 @@
-{"vocab_size": 30523, "emb_size": 300, "n_hidden": 256, "n_layers": 4, "drop_prob": 0.3, "lr": 0.001}
+{"vocab_size": 48560, "emb_size": 300, "n_hidden": 256, "n_layers": 4, "drop_prob": 0.3, "lr": 0.1}
